@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ServerService } from './services/server.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  constructor(private serverService: ServerService) {}
+  public getProducts() {
+
+    this.serverService.getProducts().subscribe(
+      (data) => {
+        console.log(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+}
 }
