@@ -1,0 +1,102 @@
+<div class="landing-page sidebar-collapse">
+    <!-- Extra details for Live View on GitHub Pages -->
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <app-navbar></app-navbar>
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('../../assets/img/audio.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1 class="title">Your Story Starts With Us.</h1>
+          <h4>Every landing page needs a small description after the big bold title, that&apos;s why we added this text here. Add here all the information that can make you or your product create the first impression.</h4>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="main main-raised">
+  <br><br><br><br>
+  <div class="profile-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 ml-auto mr-auto text-center">
+          <div class="profile">
+            <div class="name">
+              <h2 class="title">Login</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="description ">
+              <div class="row" *ngIf="step1">
+                <div class="col-md-8 mx-auto">
+                  <div class="card card-contact">
+                    <form id="contact-form" [formGroup]="emailForm">
+                      <div class="card-header card-header-raised card-header-primary text-center">
+                        <h4 class="card-title">Who are you?</h4>
+                      </div>
+                      <div class="card-body">
+                        <div class="form-group label-floating is-empty bmd-form-group">
+                          <label class="bmd-label-floating">Email address</label>
+                          <input type="email" name="email" class="form-control" formControlName="email">
+                          <span class="material-input"></span>
+                        </div>
+                      </div>
+                      <div class="card-footer justify-content-between">
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step1 = !step1" disabled=true>Previous</button>
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="step1 = !step1; getUser();" [disabled]=!emailForm.valid>Next</button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="!step1">
+                  <div class="col-md-8 mx-auto">
+                    <div class="card card-contact">
+                      <div id="contact-form">
+                        <div class="card-header card-header-raised card-header-primary text-center">
+                          <h4 class="card-title">Verify Your VoicePrint</h4>
+                        </div>
+                        <div class="card-body">
+                          <div class="form-group label-floating is-empty bmd-form-group text-center">
+                              <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne && !blobUrl" (click)=" startRecording()">
+                                  <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
+                              </button>
+                              <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingOne  && !blobUrl">
+                                  <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
+                              </button>
+                              <button type="button" class="btn btn-info btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="clearRecordedData()">
+                                  <i class="fa fa-refresh" aria-hidden="true"></i>
+                              </button>
+                              <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="verify()">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                              </button>
+                            <div *ngIf="isRecordingOne && !blobUrl"> {{recordedTime}} </div>
+                            <audio class="col-12" *ngIf="!isRecording && blobUrl"  controls>
+                              <source [src]="blobUrl" type="audio/webm">
+                            </audio>
+
+                          </div>
+                        </div>
+                        <div class="card-footer justify-content-between">
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step1 = !step1;" [disabled]="isRecordingOne  && !blobUrl">Previous</button>
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="verify()" [disabled]="!blobUrl">Next</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <div class="row text-center">
+                  <div class="col-12">Want to Register?<a [routerLink]="['/register']"> Sign Up</a></div>
+              </div>
+            </div>
+      </div>
+    </div>
+    <br><br><br>
+  </div>
+  <br><br><br>
+</div>
+<app-footer></app-footer>
