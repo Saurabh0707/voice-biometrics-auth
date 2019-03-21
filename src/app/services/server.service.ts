@@ -21,6 +21,17 @@ export class ServerService {
   createUser(){
 
   }
+  register(form){
+    const details = {
+      "user": {
+        "username": form.value.username,
+        "email": form.value.email
+      },
+      "voiceitId": "usr_2c09f6e959924adcbcd599ca600ec5bd"
+    };
+    console.log(environment.apiUrl+'api/client/');
+    return this.http.post(environment.apiUrl + 'api/client/', {details}, { headers: this.headers });
+  }
   verify(blob:any) {
     let formData = new FormData();
     console.log(blob);
@@ -29,6 +40,15 @@ export class ServerService {
     formData.append('contentLanguage', 'en-US');
     formData.append('phrase', 'Never forget tomorrow is a new day');
     return this.http.post(environment.voiceItUrl + '/verification/voice', formData, { headers: this.headers });
+  }
+  enroll(blob:any) {
+    let formData = new FormData();
+    console.log(blob);
+    formData.append('recording', blob);
+    formData.append('userId', 'usr_2c09f6e959924adcbcd599ca600ec5bd');
+    formData.append('contentLanguage', 'en-US');
+    formData.append('phrase', 'Never forget tomorrow is a new day');
+    return this.http.post(environment.voiceItUrl + '/enrollments/voice', formData, { headers: this.headers });
   }
   getPhrase(){
     let headers = new HttpHeaders();

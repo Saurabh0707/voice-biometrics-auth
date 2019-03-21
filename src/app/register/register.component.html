@@ -10,9 +10,12 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h1 class="title">Your Story Starts With Us.</h1>
-          <h4>Every landing page needs a small description after the big bold title, that&apos;s why we added this text here. Add here all the information that can make you or your product create the first impression.</h4>
+          <h1 class="title">Are you ready to become your password?</h1>
+          <h4>Simply register yourself with a unique username, enroll and verify your voice. That's it, you are ready.</h4>
           <br>
+          <a routerLink="/register" target="_blank" class="btn btn-danger btn-lg" savefrom_lm_index="0" savefrom_lm="1">
+                  <i class="fa fa-user"></i> Register
+                <div class="ripple-container"></div></a>
         </div>
       </div>
     </div>
@@ -35,20 +38,25 @@
               <div class="row"  *ngIf="step1">
                 <div class="col-md-8 mx-auto">
                   <div class="card card-contact">
-                    <form id="contact-form" method="post">
+                    <form id="contact-form" [formGroup]="emailForm">
                       <div class="card-header card-header-raised card-header-primary text-center">
                         <h4 class="card-title">Who are you?</h4>
                       </div>
                       <div class="card-body">
                         <div class="form-group label-floating is-empty bmd-form-group">
                           <label class="bmd-label-floating">Email address</label>
-                          <input type="email" name="email" class="form-control">
+                          <input type="email" name="email" formControlName="email" class="form-control">
+                          <span class="material-input"></span>
+                        </div>
+                        <div class="form-group label-floating is-empty bmd-form-group">
+                          <label class="bmd-label-floating">Username</label>
+                          <input type="text" name="username" formControlName="username" class="form-control">
                           <span class="material-input"></span>
                         </div>
                       </div>
                       <div class="card-footer justify-content-between">
                         <button style="width: 20em; " type="button" class="btn btn-primary pull-left" disabled=true>Previous</button>
-                        <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="step1 = !step1 ; step2 = !step2">Next</button>
+                        <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="step1 = !step1 ; step2 = !step2; register();" [disabled]=!emailForm.valid>Next</button>
                       </div>
                     </form>
                   </div>
@@ -63,17 +71,28 @@
                         </div>
                         <div class="card-body">
                           <div class="form-group label-floating is-empty bmd-form-group text-center">
-                              <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingTwo" (click)="isRecordingTwo = !isRecordingTwo">
-                                  <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
-                              </button>
-                              <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingTwo" (click)="isRecordingTwo = !isRecordingTwo">
-                                  <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
-                              </button>
-                          </div>
+                            <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne && !blobUrl" (click)=" startRecording()">
+                                <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingOne  && !blobUrl">
+                                <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn btn-info btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="clearRecordedData()">
+                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                            </button>
+                            <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="enroll();">
+                                  <i class="fa fa-check" aria-hidden="true"></i>
+                            </button>
+                          <div *ngIf="isRecordingOne && !blobUrl"> {{recordedTime}} </div>
+                          <audio class="col-12" *ngIf="!isRecordingOne && blobUrl"  controls>
+                            <source [src]="blobUrl" type="audio/webm">
+                          </audio>
+
+                        </div>
                         </div>
                         <div class="card-footer justify-content-between">
-                          <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step2 = !step2  ; step1 = !step1">Previous</button>
-                          <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="step2 = !step2  ; step3 = !step3">Next</button>
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step2 = !step2  ; step1 = !step1; clearRecordedData();" [disabled]="(isRecordingOne  && !blobUrl) || !step2PreAllowed">Previous</button>
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="enroll();" [disabled]="!blobUrl">Next</button>
                         </div>
                       </form>
                     </div>
@@ -88,17 +107,27 @@
                               </div>
                               <div class="card-body">
                                 <div class="form-group label-floating is-empty bmd-form-group text-center">
-                                    <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne" (click)="isRecordingOne = !isRecordingOne">
-                                        <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingOne" (click)="isRecordingOne = !isRecordingOne">
-                                        <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
-                                    </button>
-                                </div>
+                                  <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne && !blobUrl" (click)=" startRecording()">
+                                      <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
+                                  </button>
+                                  <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingOne  && !blobUrl">
+                                      <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-info btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="clearRecordedData()">
+                                      <i class="fa fa-refresh" aria-hidden="true"></i>
+                                  </button>
+                                  <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="verify();">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                  </button>
+                                <div *ngIf="isRecordingOne && !blobUrl"> {{recordedTime}} </div>
+                                <audio class="col-12" *ngIf="!isRecordingOne && blobUrl"  controls>
+                                  <source [src]="blobUrl" type="audio/webm">
+                                </audio>
+                              </div>
                               </div>
                               <div class="card-footer justify-content-between">
-                                <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step3 = !step3  ; step2 = !step2">Previous</button>
-                                <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="step3 = !step3  ; step4 = !step4">Next</button>
+                                <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step3 = !step3  ; step2 = !step2; clearRecordedData();" [disabled]="(isRecordingOne  && !blobUrl) || !step3PreAllowed">Previous</button>
+                                <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="verify()" [disabled]="!blobUrl">Next</button>
                               </div>
                             </form>
                       </div>
@@ -113,17 +142,28 @@
                                 </div>
                                 <div class="card-body">
                                   <div class="form-group label-floating is-empty bmd-form-group text-center">
-                                      <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingThree" (click)="isRecordingThree = !isRecordingThree">
-                                          <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingThree" (click)="isRecordingThree = !isRecordingThree">
-                                          <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
-                                      </button>
-                                  </div>
+                                    <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne && !blobUrl" (click)=" startRecording()">
+                                        <i class="fa fa-microphone fa-lg" aria-hidden="true" ></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-circle btn-xl Rec" *ngIf="isRecordingOne  && !blobUrl">
+                                        <i class="fa fa-microphone fa-lg" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="clearRecordedData()">
+                                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-circle btn-xl" *ngIf="!isRecordingOne  && blobUrl" (click)="verifyAgain();">
+                                          <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
+                                  <div *ngIf="isRecordingOne && !blobUrl"> {{recordedTime}} </div>
+                                  <audio class="col-12" *ngIf="!isRecordingOne && blobUrl"  controls>
+                                    <source [src]="blobUrl" type="audio/webm">
+                                  </audio>
+
+                                </div>
                                 </div>
                                 <div class="card-footer justify-content-between">
-                                  <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step4 = !step4  ; step3 = !step3">Previous</button>
-                                  <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="finalSubmit()">Next</button>
+                                  <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step4 = !step4  ; step3 = !step3; clearRecordedData();"[disabled]="(isRecordingOne  && !blobUrl ) || !step4PreAllowed" >Previous</button>
+                                  <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="verifyAgain();" [disabled]="!blobUrl">Next</button>
                                 </div>
                               </form>
                         </div>

@@ -10,9 +10,12 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h1 class="title">Your Story Starts With Us.</h1>
-          <h4>Every landing page needs a small description after the big bold title, that&apos;s why we added this text here. Add here all the information that can make you or your product create the first impression.</h4>
+          <h1 class="title">Are you ready to become your password?</h1>
+          <h4>Simply register yourself with a unique username, enroll and verify your voice. That's it, you are ready.</h4>
           <br>
+          <a routerLink="/register" target="_blank" class="btn btn-danger btn-lg" savefrom_lm_index="0" savefrom_lm="1">
+                  <i class="fa fa-user"></i> Register
+                <div class="ripple-container"></div></a>
         </div>
       </div>
     </div>
@@ -40,8 +43,8 @@
                       </div>
                       <div class="card-body">
                         <div class="form-group label-floating is-empty bmd-form-group">
-                          <label class="bmd-label-floating">Email address</label>
-                          <input type="email" name="email" class="form-control" formControlName="email">
+                          <label class="bmd-label-floating">Username</label>
+                          <input type="text" name="username" class="form-control" formControlName="username">
                           <span class="material-input"></span>
                         </div>
                       </div>
@@ -82,7 +85,7 @@
                           </div>
                         </div>
                         <div class="card-footer justify-content-between">
-                          <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step1 = !step1;" [disabled]="isRecordingOne  && !blobUrl">Previous</button>
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step1 = !step1; clearRecordedData();" [disabled]="isRecordingOne  && !blobUrl">Previous</button>
                           <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="verify()" [disabled]="!blobUrl">Next</button>
                         </div>
                       </div>
