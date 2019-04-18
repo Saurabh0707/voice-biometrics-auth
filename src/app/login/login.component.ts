@@ -5,6 +5,8 @@ import { AudioRecordingService } from '../services/audio-recording.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ServerService } from '../services/server.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment.prod';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +17,11 @@ export class LoginComponent implements OnInit {
    recordedTime;
    blobUrl;
    blob;
+   voiceitId;
    emailForm: FormGroup;
   private notifier: NotifierService;
   constructor(private serverService: ServerService,
+    private router: Router,
     private spinner: NgxSpinnerService,
      notifierService: NotifierService,
      private audioRecordingService: AudioRecordingService,
@@ -44,7 +48,7 @@ export class LoginComponent implements OnInit {
   step1 = true;
   ngOnInit() {
     this.emailForm = new FormGroup({
-      'username' : new FormControl(null, [Validators.required])
+      'email' : new FormControl(null, [Validators.required, Validators.email])
     });
   }
 
@@ -76,8 +80,18 @@ export class LoginComponent implements OnInit {
   }
   verify() {
     this.spinner.show();
-    this.serverService.verify(this.blob).subscribe(
-      (data) => {console.log(data)},
+    this.serverService.verify(this.blob, this.voiceitId).subscribe(
+      (data) => {
+        this.spinner.show();
+        const loginData = {
+          'username' : this.emailForm.value.email,
+          'password' : environment.password
+        };
+        this.serverService.login(loginData).subscribe(
+          (backendData) => {console.log(backendData); this.spinner.hide(); this.router.navigate(['/dashboard']); },
+          (backendError) => {console.log(backendError); this.spinner.hide(); }
+        );
+      },
       (error) => {
         this.clearRecordedData();
         this.spinner.hide();
@@ -85,12 +99,31 @@ export class LoginComponent implements OnInit {
         console.log(error);
       });
   }
+
+  login() {
+    this.spinner.show();
+        const loginData = {
+          'username' : this.emailForm.value.email,
+          'password' : 'saurabh123'
+        };
+        this.serverService.login(loginData).subscribe(
+          (backendData) => {console.log(backendData); this.spinner.hide(); },
+          (backendError) => {console.log(backendError); this.spinner.hide(); }
+        );
+     }
+
   ngOnDestroy(): void {
     this.abortRecording();
   }
-  getUser(email) {
-    this.serverService.getUser(email).subscribe(
-      (data) => {console.log(data)},
+  getUser() {
+    console.log(this.emailForm.value.email);
+    this.serverService.getUser(this.emailForm.value.email).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.voiceitId = data.voiceit_id;
+        console.log(this.voiceitId);
+        this.step1 = !this.step1;
+      },
       (error) => {
         console.log(error);
       });

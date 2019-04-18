@@ -43,14 +43,14 @@
                       </div>
                       <div class="card-body">
                         <div class="form-group label-floating is-empty bmd-form-group">
-                          <label class="bmd-label-floating">Username</label>
-                          <input type="text" name="username" class="form-control" formControlName="username">
+                          <label class="bmd-label-floating">Email</label>
+                          <input type="text" name="email" class="form-control" formControlName="email">
                           <span class="material-input"></span>
                         </div>
                       </div>
                       <div class="card-footer justify-content-between">
                           <button style="width: 20em; " type="button" class="btn btn-primary pull-left" (click)="step1 = !step1" disabled=true>Previous</button>
-                          <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="step1 = !step1; getUser();" [disabled]=!emailForm.valid>Next</button>
+                          <button style="width: 20em; " type="button" class="btn btn-primary pull-right" (click)="getUser();" [disabled]=!emailForm.valid>Next</button>
                         </div>
                     </form>
                   </div>

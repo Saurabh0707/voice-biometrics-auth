@@ -4,9 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUrl : 'http://localhost:8000/',
+  apiUrl : 'http://127.0.0.1:8000/api/',
   voiceItUrl : 'https://api.voiceit.io/',
-  voiceItId : 'Basic a2V5XzQ1MTE4NWIxNDMzZTQxMGZiNTJlNjY3YTY1ZGU2MDY1OnRva182YWEzMWU3ODU0MTg0ZTc0OTJkZTA4ZDZjMGNlM2I3OA=='
+  voiceItId : 'Basic a2V5XzQ1MTE4NWIxNDMzZTQxMGZiNTJlNjY3YTY1ZGU2MDY1OnRva182YWEzMWU3ODU0MTg0ZTc0OTJkZTA4ZDZjMGNlM2I3OA==',
+  password : 'saurabh123',
+  reverse_proxy: 'https://cors-anywhere.herokuapp.com/'
 };
 
 /*

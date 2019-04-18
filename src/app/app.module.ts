@@ -13,6 +13,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { AudioRecordingService } from './services/audio-recording.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DashboardComponent } from './dashboard/dashboard.component';
 const customNotifierOptions: NotifierOptions = {
   position: {
 		horizontal: {
@@ -61,7 +62,8 @@ const customNotifierOptions: NotifierOptions = {
     FooterComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
