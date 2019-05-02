@@ -81,16 +81,23 @@ export class LoginComponent implements OnInit {
   verify() {
     this.spinner.show();
     this.serverService.verify(this.blob, this.voiceitId).subscribe(
-      (data) => {
+      (data: any) => {
         this.spinner.show();
-        const loginData = {
-          'username' : this.emailForm.value.email,
-          'password' : environment.password
-        };
-        this.serverService.login(loginData).subscribe(
-          (backendData) => {console.log(backendData); this.spinner.hide(); this.router.navigate(['/dashboard']); },
-          (backendError) => {console.log(backendError); this.spinner.hide(); }
-        );
+        console.log(data);
+        if (data.responseCode === 'FAIL') {
+          this.clearRecordedData();
+          this.spinner.hide();
+          this.notifier.notify( 'error', data.message );
+        } else {
+          const loginData = {
+            'username' : this.emailForm.value.email,
+            'password' : environment.password
+          };
+          this.serverService.login(loginData).subscribe(
+            (backendData) => {console.log(backendData); this.spinner.hide(); this.router.navigate(['/dashboard']); },
+            (backendError) => {console.log(backendError); this.spinner.hide(); }
+          );
+        }
       },
       (error) => {
         this.clearRecordedData();
